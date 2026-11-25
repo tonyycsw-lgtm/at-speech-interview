@@ -1,0 +1,19 @@
+# 作業系統暫存檔
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器
+.vscode/
+.idea/
+*.swp
+
+# 記錄檔
+*.log
+
+# 原書掃描檔（僅保留本地，未上傳：版權與容量考量）
+面试班.pdf
+
+# Python 暫存
+__pycache__/
+*.pyc

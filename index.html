@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="升中面試互動課件：核心面試問題、即席說話、小組討論、閱讀理解、朗讀技巧、面試禮儀。原生 HTML/CSS/JS，離線可用，支援觸屏大電視與列印。">
+<meta name="theme-color" content="#2563EB">
+<title>升中面試互動課件｜AT Speech Learning Institute</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#stage">跳至主要內容</a>
+
+<!-- SVG 圖標庫（內嵌，離線可用；原始檔見 /assets/icons） -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></symbol>
+  <symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="9" r="1.6" fill="currentColor"/><circle cx="15" cy="15" r="1.6" fill="currentColor"/><circle cx="15" cy="9" r="1.6" fill="currentColor"/><circle cx="9" cy="15" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 8V4h10v4" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="8" width="16" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="7" y="14" width="10" height="6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 6c3-1 5-1 8 1 3-2 5-2 8-1v12c-3-1-5-1-8 1-3-2-5-2-8-1z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<div class="app">
+  <!-- ====================== 側邊導航（左 20%） ====================== -->
+  <aside class="sidebar" id="sidebar" aria-label="課程目錄">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true">AT</span>
+      <span class="brand__text">
+        <span class="brand__title">升中面試互動課件</span>
+        <span class="brand__sub">Interview Textbook · ES-V202610</span>
+      </span>
+    </div>
+
+    <div class="progress" role="group" aria-label="課程進度">
+      <div class="progress__row">
+        <span>當前頁</span>
+        <span class="progress__page" id="progressPage">P.00</span>
+      </div>
+      <div class="progress__bar" aria-hidden="true"><span class="progress__fill" id="progressFill"></span></div>
+      <div class="progress__row">
+        <span>共 28 頁</span>
+        <span id="pagerCount">1 / 28</span>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav" aria-label="章節目錄"></nav>
+
+    <div class="sidebar__note">
+      <span>← → 翻頁　Space 播放／暫停</span>
+      <span>AT Speech Learning Institute · ES-V202610</span>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim" data-scrim aria-hidden="true"></div>
+
+  <!-- ====================== 主要內容區（右 80%） ====================== -->
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="btn btn--ghost btn--sm" id="menuBtn" data-menu
+              aria-controls="sidebar" aria-expanded="false" aria-label="開啟目錄">
+        <svg class="btn__icon" aria-hidden="true"><use href="#i-menu"></use></svg>
+      </button>
+      <div class="topbar__crumb">
+        <div class="topbar__chapter" id="crumbChapter">Contents　目錄</div>
+        <div class="topbar__title" id="crumbTitle">目錄</div>
+      </div>
+      <div class="topbar__actions">
+        <span class="page__badge" id="pageBadge" aria-live="polite">P.00</span>
+        <button type="button" class="btn btn--primary btn--sm" data-export>
+          <svg class="btn__icon" aria-hidden="true"><use href="#i-print"></use></svg>
+          列印／匯出 PDF
+        </button>
+      </div>
+    </header>
+
+    <div class="daybar" id="dayBar" role="group" aria-label="課程日程切換"></div>
+
+    <main class="stage" id="stage" tabindex="-1">
+      <!-- 由 app.js 依 PAGES 依序渲染 P.00–P.27 -->
+    </main>
+
+    <div class="pager">
+      <button type="button" class="btn btn--ghost pager__btn" data-prev aria-label="上一頁">
+        <svg class="btn__icon" aria-hidden="true"><use href="#i-left"></use></svg>
+        上一頁
+      </button>
+      <div class="pager__mid">
+        <div class="pager__dots" id="pagerDots" role="group" aria-label="快速跳頁"></div>
+        <span class="pager__count" id="pagerCountBottom">1 / 28</span>
+      </div>
+      <button type="button" class="btn btn--primary pager__btn" data-next aria-label="下一頁">
+        下一頁
+        <svg class="btn__icon" aria-hidden="true"><use href="#i-right"></use></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

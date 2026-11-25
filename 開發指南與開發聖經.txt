@@ -1,0 +1,178 @@
+開發指南與開發聖經
+
+這是一份為開發團隊準備的**《面試班互動課件開發指南與開發聖經》**。本指南嚴格遵循歐美大廠（如 Google Material Design, Apple HIG, Microsoft Fluent）的 UI/UX 規範，確保交付的 HTML 課件具備專業、現代、無障礙且高度穩定的品質。
+
+---
+
+# 📘 面試班互動課件：開發聖經與指南 (Dev Bible & Guide)
+
+## 第一章：核心原則與技術選型 (Core Principles & Stack)
+
+### 1.1 設計理念 (Design Philosophy)
+*   **Content First (內容優先)**：UI 是綠葉，教學內容是紅花。絕不使用干擾閱讀的炫技動畫。
+*   **Progressive Disclosure (漸進式揭示)**：將複雜資訊分層。例如「先顯示問題 -> 學生思考 -> 點擊顯示答案與音頻」。
+*   **Accessibility (無障礙設計)**：符合 WCAG 2.1 AA 標準。確保字體夠大、對比度夠高、所有互動皆可用鍵盤操作。
+*   **Zero-Dependency (零依賴)**：不引入 React/Vue 等框架，使用原生 HTML5 + CSS3 + Vanilla JS。確保在學校老舊電腦的瀏覽器上也能瞬間加載。
+
+### 1.2 技術架構 (Tech Stack)
+*   **HTML**：HTML5 語義化標籤 (`<main>`, `<section>`, `<article>`, `<audio>`)。
+*   **CSS**：原生 CSS3 (Flexbox/Grid)，使用 CSS Variables (自定義屬性) 管理主題色。
+*   **JS**：原生 ES6+ (Vanilla JS)，負責路由切換、音頻控制、TTS 降級處理。
+*   **音頻**：本地 MP3 檔案。
+*   **字體**：英文 `Inter` 或 `Roboto`；繁體中文 `Noto Sans HK` (透過 Google Fonts 引入，或本地備份)。
+
+---
+
+## 第二章：UI 設計規範 (UI Best Practices)
+
+### 2.1 色彩系統 (Color Palette)
+採用現代、冷靜的「學術藍」與「中性灰」，避免高飽和度色彩造成視覺疲勞。
+*   **Primary (主色)**：`#2563EB` (Tailwind Blue-600) - 用於按鈕、進度條、活動狀態。
+*   **Background (背景)**：`#F8FAFC` (Slate-50) - 舒適的淺灰白，比純白更護眼。
+*   **Surface (卡片背景)**：`#FFFFFF` - 內容區塊。
+*   **Text (文字)**：`#1E293B` (Slate-800) 主文字；`#64748B` (Slate-500) 次要文字/提示。
+*   **Accent (強調/警示)**：`#EF4444` (Red-500) - 用於倒計時最後 5 秒、錯誤提示。
+
+### 2.2 排版系統 (Typography)
+*   **行高 (Line-height)**：嚴格設定為 `1.6`，確保中英混排的呼吸感。
+*   **字體大小**：
+    *   標題 (H1/H2)：`24px` / `20px`，粗體 (`font-weight: 700`)。
+    *   內文：`16px` (最小不得低於 16px，方便投影)。
+    *   提示/標籤：`14px`。
+*   **段落間距**：段落之間 `margin-bottom: 1rem`。
+
+### 2.3 佈局與元件 (Layout & Components)
+*   **兩欄佈局 (Desktop)**：
+    *   左側 (佔比 20%)：固定導航側邊欄 (Sidebar)，顯示當前頁碼 (如 `P.02`) 和目錄。
+    *   右側 (佔比 80%)：主要內容區。
+*   **卡片設計 (Card)**：所有題目、答案區塊都包在 `border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);` 的卡片中。
+*   **按鈕 (Buttons)**：
+    *   高度 `40px`，圓角 `6px`。
+    *   Hover 狀態：背景加深 `10%`，`transition: all 0.2s ease`。
+    *   包含「播放音頻」、「顯示答案」、「下一頁」等。
+
+---
+
+## 第三章：UX 與互動邏輯 (UX & Interaction Logic)
+
+### 3.1 音頻播放邏輯 (Audio UX)
+*   **視覺反饋**：點擊播放按鈕後，按鈕狀態變為「暫停圖標」，旁邊顯示播放進度條（Waveform 或簡單的 Progress bar）。
+*   **互斥播放 (Exclusive Playback)**：**極度重要！** 當點擊播放 A 音頻時，必須自動暫停正在播放的 B 音頻。防止課堂上聲音重疊。
+*   **鍵盤快捷鍵**：按下 `Space` (空白鍵) 可暫停/播放當前音頻；按下 `←` / `→` 切換上/下一頁（需避免與輸入框衝突）。
+
+### 3.2 英語發音處理 (English TTS)
+*   **引擎**：Edge TTS (Sonia, en-GB, -20% rate)。
+*   **預處理**：所有 MP3 必須在後台生成完畢，命名如 `P02_Q1_EN.mp3`。
+*   **降級方案**：若 `<audio>` 加載失敗 (觸發 `onerror`)，顯示 Toast 提示「音頻加載失敗」，同時提供瀏覽器 TTS 備用按鈕（使用 `SpeechSynthesisUtterance`，語言設為 `en-GB`）。
+
+### 3.3 粵語發音處理 (Cantonese TTS)
+*   **優先級 1 (主)**：加載本地 MiniMax 生成的 MP3 (`P20_Canto_01.mp3`)。**必須使用 `<audio preload="auto">`**，保證點擊瞬間出聲。
+*   **優先級 2 (備)**：如果本地 MP3 404 或加載失敗，JS 捕獲錯誤，自動觸發瀏覽器內置 TTS。
+    *   JS 邏輯：`const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'zh-HK'; window.speechSynthesis.speak(utterance);`
+    *   **UI 提示**：在該按鈕旁顯示一個小標籤 `(TTS)`，讓老師知道當前是備用發音。
+
+### 3.4 頁面切換 (Navigation & State)
+*   **無刷新切換 (SPA 體驗)**：使用 JS 控制 `<section>` 的 `display: block / none`。切換時加上淡入淡出效果 (`opacity` transition)。
+*   **進度保存**：使用 `localStorage` 記錄當前頁碼。老師不小心關閉網頁，重新打開時自動回到 `P.xx`。
+*   **錨點對齊**：切換頁面時，自動滾動到頂部 (`window.scrollTo(0, 0)`)。
+
+---
+
+## 第四章：核心互動功能實作 (Feature Implementation)
+
+### 4.1 填空與揭示答案 (Reveal & Fill-in-the-blanks)
+*   **結構**：`<span class="blank" data-answer="Name">______</span>`
+*   **邏輯**：點擊 `______`，替換文字為 `data-answer`，並加上綠色背景 `background-color: #D1FAE5;`。
+*   **音頻綁定**：點擊顯示答案的同時，觸發對應的 MP3 播放（如 `P02_Answer.mp3`）。
+
+### 4.2 即席抽題與倒計時 (Randomizer & Timer)
+*   **抽題邏輯**：點擊「抽題」按鈕，JS 從題庫 Array 中隨機抽取一個，顯示在卡片上。
+*   **倒計時器**：
+    *   使用 `setInterval` 每秒更新。
+    *   UI 顯示：`00:30` 的大號數字。
+    *   **警示狀態**：當剩餘時間 <= 5 秒，數字變紅 (`#EF4444`) 並伴隨輕微的 `pulse` 動畫。
+    *   時間到：播放 `beep.mp3`，並顯示「Time's up!」。
+
+### 4.3 粵語正音「聽音辨字」 (Pronunciation Quiz)
+*   **介面**：播放按鈕 + 兩個選項按鈕 (例如：`[ ] 唔 (M)`, `[ ] 吳 (NG)`)。
+*   **邏輯**：
+    *   點擊播放按鈕，播放音頻。
+    *   學生點擊選項。正確：按鈕變綠並播放「叮」音效；錯誤：按鈕變紅並抖動 (`shake` 動畫)，允許重試。
+
+---
+
+## 第五章：列印樣式與 PDF 導出 (Print & PDF Export)
+
+為了實現「雙軌交付」，HTML 必須支援一鍵導出 PDF。
+
+### 5.1 列印媒體查詢 (Media Query)
+在 `style.css` 底部加入：
+```css
+@media print {
+    /* 隱藏導航、按鈕、音頻播放器 */
+    .sidebar, .nav-buttons, .audio-player, .action-btn { display: none !important; }
+    
+    /* 強制顯示所有頁面 (若使用 SPA 架構，需在列印前用 JS 全部展開) */
+    section { display: block !important; page-break-after: always; }
+    
+    /* 調整邊距與字體大小適應 A4 */
+    body { background: white; font-size: 12pt; }
+    .card { box-shadow: none; border: 1px solid #ccc; }
+}
+```
+
+### 5.2 JS 列印邏輯
+在頁面右上角加一個「列印/導出 PDF」按鈕：
+```javascript
+function exportPDF() {
+    // 展開所有隱藏的 section
+    document.querySelectorAll('section').forEach(sec => sec.style.display = 'block');
+    // 觸發瀏覽器列印
+    window.print();
+    // 列印完成後恢復 SPA 狀態 (可選)
+    setTimeout(() => { /* 重新初始化 SPA 邏輯 */ }, 1000);
+}
+```
+
+---
+
+## 第六章：團隊協作與交付規範 (Team & Delivery)
+
+### 6.1 檔案結構 (Folder Structure)
+團隊必須嚴格遵守以下目錄結構，避免路徑錯誤：
+```text
+/project-root
+  ├── index.html          (主頁面)
+  ├── /css
+  │     └── style.css     (UI/UX 樣式、列印樣式)
+  ├── /js
+  │     ├── app.js        (SPA 路由、UI 事件)
+  │     ├── audio.js      (音頻播放器、TTS 降級邏輯)
+  │     └── data.js       (題庫、填空答案、音頻路徑映射)
+  ├── /audio
+  │     ├── P02_Q1_EN.mp3
+  │     ├── P20_Canto_01.mp3
+  │     └── ...
+  └── /assets
+        └── icons/        (SVG 圖標)
+```
+
+### 6.2 命名規範 (Naming Convention)
+*   **音頻檔案**：`P[頁碼]_[類型]_[語言]_[序號].mp3` (例：`P02_Q1_EN_Sonia.mp3`、`P20_Canto_01.mp3`)。
+*   **CSS Class**：使用 BEM 命名法 (例：`.card__title`, `.btn--primary`)。
+*   **JS 變數**：駝峰式命名 (CamelCase，例：`currentPage`, `isPlaying`)。
+
+### 6.3 開發流程 (Workflow)
+1.  **Sprint 1**：搭建 HTML 骨架，完成 P1-P26 的繁體文字排版與 CSS 樣式。
+2.  **Sprint 2**：加入音頻檔案，實作播放、互斥、TTS 降級邏輯。
+3.  **Sprint 3**：實作填空、抽題、倒計時等互動功能。
+4.  **Sprint 4**：實作列印樣式，導出 PDF 講義。
+5.  **Sprint 5**：跨瀏覽器測試 (Chrome, Edge, Safari)、無障礙測試 (鍵盤導航、對比度)。
+6.  **Sprint 6 (可選)**：根據定稿 HTML，製作靜態 PPT 備份。
+
+---
+
+**給團隊的終極寄語**：
+> 「我們不是在寫代碼，我們是在為學生搭建一座通往理想中學的橋樑。UI 的每一個像素，UX 的每一次點擊，都必須精準、流暢、無障礙。請以打造 Apple Keynote 或 Google Classroom 的標準來要求這份課件。」
+
+請團隊按照此指南開工，有任何技術細節需要具體代碼範例（如音頻互斥播放的 JS 寫法），隨時提出。

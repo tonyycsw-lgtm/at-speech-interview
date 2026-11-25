@@ -1,5 +1,7 @@
 # 升中面試班 · 互動 HTML 課件
 
+**線上版本（課室大電視／平板瀏覽器直接開啟）：** https://tonyycsw-lgtm.github.io/at-speech-interview/
+
 依《面试班.pdf》（Interview Textbook，AT Speech Learning Institute，ES-V202610）原書頁序編排，
 供**課堂觸屏互動大電視**與**學生自學**兩用；零依賴原生 HTML5 / CSS3 / Vanilla JS，離線可跑。
 

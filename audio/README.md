@@ -1,39 +1,35 @@
 # audio/ 音頻檔案說明
 
-此目錄預設為空：課件會自動使用瀏覽器 TTS，**僅英語**（`en-GB`，rate 0.8）。
-要提升課堂出聲品質，可把預錄 MP3 放在本目錄，並在 `js/data.js` 的 `window.AUDIO_MANIFEST` 打開對應 key。
+本目錄存放 41 段英文示範 MP3，由 Edge TTS **`en-GB-SoniaNeural`** 合成（英式英語女聲，語速 `-20%`）。
+播放器優先播本地 MP3；檔案缺失或載入失敗時自動退回瀏覽器 TTS，並在按鈕旁顯示 `TTS` 標籤。
 
 ## 命名規則
 
 ```
-<頁碼>_EN_<序號>_<錄音者>.mp3
+<key>_Sonia.mp3
 
-P02_EN_01_Sonia.mp3      P.02 英文第 1 段，Sonia 錄音
+P02_EN_01_Sonia.mp3      P.02 英文第 1 段，Sonia 語音
 P02_EN_02_Sonia.mp3
-BEEP.mp3                 計時歸零 / 答題提示音（可選）
+BEEP.mp3                 計時歸零 / 答題提示音（可選，目前未提供）
 ```
 
-- 音頻僅英語；`_ZH_` 中文段落與 `QUIZ_` 聽音辨字題不生成播放按鈕，亦不錄 MP3。
+- 音頻僅英語；`_ZH_` 中文段落與 `QUIZ_` 聽音辨字題不生成播放按鈕，亦不合成 MP3。
 - 序號兩位數，逐段遞增，與該頁出現順序一致。
 
-## 如何啟用
+## 重新合成
 
-1. 把 MP3 放進 `audio/`。
-2. 編輯 `_build/d1.js`（或對應分片）中的清單，例如：
+改過課文後，在專案根目錄依序執行（edge-tts 裝在 `.venv/`）：
 
-```js
-window.AUDIO_MANIFEST = [
-  'P02_EN_01',
-  'P02_EN_02'
-];
+```powershell
+node _build\dump_audio_map.js      # 抽出 key 與朗讀文本 → _build/audio_map.json
+node _build\update_manifest.js     # 同步 manifest 到 _build/d1.js
+python _build\build.py             # 重建 js/data.js
+.\.venv\Scripts\python.exe _build\gen_edge_tts.py          # 全部重製
+.\.venv\Scripts\python.exe _build\gen_edge_tts.py --only P02_EN_01   # 單段重製
 ```
 
-3. 執行 `python _build\build.py` 重建 `js/data.js`。
+## 音訊規格
 
-檔案缺失或播放失敗時，會自動退回 TTS 並在按鈕旁顯示 `TTS` 標籤，不會中斷課堂。
-
-## 錄音建議
-
-- 格式：MP3、44.1kHz、單聲道、96–128kbps（課室擴音足夠且檔案小）。
-- 語速：英文每分鐘約 130–150 字，保留書面標記的停頓。
-- 每段單獨成檔（一句到三句），方便逐句點播與學生跟讀。
+- 格式：MP3，單聲道；課室擴音足夠且檔案小。
+- 語速：`-20%`（約每分鐘 130–150 字），保留書面標記的停頓。
+- 每段單獨成檔（一句到三句，長示範段落另成一檔），方便逐句點播與學生跟讀。

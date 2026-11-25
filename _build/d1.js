@@ -21,7 +21,49 @@ window.CHAPTERS = [
 
 /* 音頻清單：留空即全部使用瀏覽器 TTS；
    若把 MP3 放入 /audio，於此加入 key（例：'P03_EN_01'）即可自動優先播放檔案。 */
-window.AUDIO_MANIFEST = [];
+window.AUDIO_MANIFEST = [
+  'P02_EN_01',
+  'P02_EN_02',
+  'P02_EN_03',
+  'P02_EN_04',
+  'P02_EN_05',
+  'P03_EN_01',
+  'P03_EN_02',
+  'P03_EN_03',
+  'P03_EN_04',
+  'P03_EN_05',
+  'P03_EN_06',
+  'P03_EN_07',
+  'P04_EN_01',
+  'P04_EN_02',
+  'P04_EN_03',
+  'P05_EN_01',
+  'P05_EN_02',
+  'P05_EN_03',
+  'P05_EN_04',
+  'P05_EN_05',
+  'P05_EN_06',
+  'P05_EN_07',
+  'P05_EN_08',
+  'P05_EN_09',
+  'P06_EN_01',
+  'P06_EN_02',
+  'P06_EN_03',
+  'P06_EN_04',
+  'P06_EN_05',
+  'P06_EN_06',
+  'P06_EN_07',
+  'P06_EN_08',
+  'P07_EN_01',
+  'P07_EN_02',
+  'P07_EN_03',
+  'P07_EN_04',
+  'P08_EN_01',
+  'P09_EN_01',
+  'P09_EN_02',
+  'P18_EN_01',
+  'P22_EN_01'
+];
 window.AUDIO_BASE = 'audio/';
 
 window.COURSE_META = {

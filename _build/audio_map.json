@@ -1,0 +1,207 @@
+{
+  "P02_EN_01": {
+    "text": "My name is Mary. I live with my parents. I am an only child / the eldest child I have two siblings. I get along very well with my family",
+    "type": "p",
+    "page": "P02"
+  },
+  "P02_EN_02": {
+    "text": "I study at School Name. I like school very much. I particularly excel in Chinese and English because I enjoy reading. I always work hard, I am proud to have achieved rank in my class this year",
+    "type": "p",
+    "page": "P02"
+  },
+  "P02_EN_03": {
+    "text": "I am a hardworking and determined person. I am good at Maths / Music. I am also aware of my weaknesses. For instance, I can be quite a perfectionist, I often insist on completing one task thoroughly before starting another. I am learning to manage my time better so I can do more things",
+    "type": "p",
+    "page": "P02"
+  },
+  "P02_EN_04": {
+    "text": "I am in the school choir and the basketball team. I love singing and sports. I have received several Certificates of Merit at the Hong Kong Schools Music Festival. These experiences have taught me the value of teamwork and never give up",
+    "type": "p",
+    "page": "P02"
+  },
+  "P02_EN_05": {
+    "text": "I like helping others. As a school prefect and an active member of the Community Youth Club (CYC), I have learned how to be a responsible leader. I enjoy serving the community because making a positive impact brings me a great sense of achievement",
+    "type": "p",
+    "page": "P02"
+  },
+  "P03_EN_01": {
+    "text": "Good morning. My name is Name and I study at School Name. I am the eldest child in my family, which has taught me to be responsible and caring from a young age. In school, I am a hard-working student who excels in Chinese and English. I was very proud to receive the Best Progress Award last year, as it showed that my effort really paid off. Outside the classroom, I am an active person. I enjoy singing in the school choir and playing basketball. These activities helped me win a Merit in the Speech Festival and taught me how to be a good team player. I also love giving back to society through social service, such as flag selling and visiting elderly homes. These experiences made me more compassionate. As a school prefect, I enjoy helping my teachers and peers every day. Sometimes, I tend to focus too much on one thing because I want it to be perfect. However, I am learning to manage my time better and be more flexible. I truly hope to join your school family and learn from the teachers here. Thank you",
+    "type": "example",
+    "page": "P03"
+  },
+  "P03_EN_02": {
+    "text": "Having visited your school and spoken with both the teachers and students, I was deeply impressed by how kind, supportive, and capable the school community is. It is evident that the school fosters a warm and nurturing environment where every member is valued",
+    "type": "p",
+    "page": "P03"
+  },
+  "P03_EN_03": {
+    "text": "Your school's outstanding reputation in academic achievements / sporting excellence is truly inspiring, and I sincerely hope to challenge myself and achieve the same high standards here",
+    "type": "p",
+    "page": "P03"
+  },
+  "P03_EN_04": {
+    "text": "I am eager to explore subjects such as English Literature, Drama, Information and Communication Technology (ICT), Arts, which are excellently provided by your curriculum",
+    "type": "p",
+    "page": "P03"
+  },
+  "P03_EN_05": {
+    "text": "I am also very impressed by your school's modern facilities. Especially the extensive library, the Auditorium, the Indoor Swimming Pool, and the Drama and Dance Studio. I believe these will make my learning much more interesting",
+    "type": "p",
+    "page": "P03"
+  },
+  "P03_EN_06": {
+    "text": "Your school's illustrious history, dating back to 19XX, and your time-honoured motto, To Serve and to Lead, deeply inspire me. It is evident that the school has cultivated a distinguished culture where students are not only bright and articulate but also hardworking and persistent",
+    "type": "p",
+    "page": "P03"
+  },
+  "P03_EN_07": {
+    "text": "I always get good marks in Maths. I love to learn new things and always try to find out more than what's in my books",
+    "type": "example",
+    "page": "P03"
+  },
+  "P04_EN_01": {
+    "text": "As a keen sports player and the captain of my school's football team, I learned how important it is to work with a team and play fair even when it's difficult",
+    "type": "example",
+    "page": "P04"
+  },
+  "P04_EN_02": {
+    "text": "I was happy to win the Principal's Award and was recognized for my outstanding performance in the regional science fair",
+    "type": "example",
+    "page": "P04"
+  },
+  "P04_EN_03": {
+    "text": "I consider myself a well-rounded individual who is both adaptable and versatile. I am a creative problem solver who enjoys tackling new challenges",
+    "type": "example",
+    "page": "P04"
+  },
+  "P05_EN_01": {
+    "text": "There are four of us in my family, including my father, my mother, my younger sister, and me. younger sister elder brother",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_02": {
+    "text": "only child There are three of us in my family, including my parents and me. I am an only child, so I spend a lot of quality time with my parents",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_03": {
+    "text": "\"I am the eldest child, and I have two younger siblings.\" Siblings",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_04": {
+    "text": "There are two of us in my family, including my mother and me. We are very happy and close. This has taught me to be more independent.",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_05": {
+    "text": "My father is an engineer, while my mother is a dedicated homemaker who takes great care of our daily lives. \"Homemaker\" \"Housewife\"",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_06": {
+    "text": "During weekends, we usually (go to the library / museums / go shopping / go hiking in the countryside / park) together. These outings are important to us because they help us stay healthy and relax after a busy week",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_07": {
+    "text": "I really enjoy my family life. My parents love me, they not only guide me in my studies but also instill good values in me, teaching me to be a person of integrity and kindness. I love my parents very much and I am grateful for their constant support",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_08": {
+    "text": "Let me share a meaningful family story with you. When I was about 8 years old, I got quite sick with a high fever. I felt very weak and scared. My parents took wonderful care of me. They stayed by my side almost all the time, checking my temperature and giving me medicine. They even told me stories to make me feel better",
+    "type": "p",
+    "page": "P05"
+  },
+  "P05_EN_09": {
+    "text": "After a few days, I got well again! To celebrate, my family and I went to the park / the beach / a nice restaurant together. This experience made me truly feel my parents' deep love for me, and it made me incredibly thankful to be born into this family. I learned that my family is always there for me, no matter what",
+    "type": "p",
+    "page": "P05"
+  },
+  "P06_EN_01": {
+    "text": "When I grow up, I aspire to be a doctor. I believe it's a noble profession where I can genuinely help people and contribute to their well-being. I am particularly interested in medical research, and I hope to be part of a team that discovers new ways to treat illnesses, ultimately helping many people live healthier and happier lives",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_02": {
+    "text": "My dream is to become a pilot. I am fascinated by aviation and the idea of flying across the globe. I would love to experience different cultures and see many beautiful places, such as Japan, France, and Australia. I believe being a pilot would allow me to combine my passion for travel with a challenging and rewarding career",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_03": {
+    "text": "I wish to become an architect in the future. I am very keen on designing and creating new structures. I hope to design buildings that are not only functional but also inspiring and iconic, much like the impressive IFC building in Central, which truly represents Hong Kong's modern skyline. I want to contribute to shaping our city's future appearance",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_04": {
+    "text": "I want to be a lawyer because I believe in justice and fairness. I would like to help people who are in need of legal assistance and ensure that everyone is treated equally under the law. I think a strong legal system is crucial for a stable and fair society, and I want to play a part in upholding those principles in Hong Kong",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_05": {
+    "text": "I hope to be a teacher as I have a strong command of languages. Furthermore, I want to teach students not just academic knowledge, but how to develop strong moral character",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_06": {
+    "text": "I haven't decided on a specific career yet, but I am very passionate about mathematics. I love solving complex problems and finding logical solutions. I hope to pursue a career where I can apply my mathematical skills",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_07": {
+    "text": "I aspire to be a businessman, following in my father's footsteps. I am eager to learn how to create value, innovate, and contribute to the economy. I also want to be able to provide for my family in the future. I believe that with hard work and good ideas, I can build a successful enterprise and make a positive difference",
+    "type": "p",
+    "page": "P06"
+  },
+  "P06_EN_08": {
+    "text": "I plan to study Global Business overseas, ideally in the UK or the USA. I aim to earn a Master's and a Doctorate degree, and eventually start my own business. This education will provide the knowledge I need to make a positive impact on the community",
+    "type": "p",
+    "page": "P06"
+  },
+  "P07_EN_01": {
+    "text": "I would like to introduce a book called Science Discovery",
+    "type": "p",
+    "page": "P07"
+  },
+  "P07_EN_02": {
+    "text": "Summary It is a non-fiction book that explores the most important scientific inventions and discoveries of the 20th century. It also shares the fascinating life stories of great scientists, such as Thomas Edison and Albert Einstein",
+    "type": "p",
+    "page": "P07"
+  },
+  "P07_EN_03": {
+    "text": "I like this book because it is very informative but easy to understand. It uses simple language to explain complex ideas, which makes learning science very enjoyable",
+    "type": "p",
+    "page": "P07"
+  },
+  "P07_EN_04": {
+    "text": "Impact This book has sparked my curiosity about how things work. It inspired me to be more observant in my daily life and to keep exploring new knowledge. Thank you",
+    "type": "p",
+    "page": "P07"
+  },
+  "P08_EN_01": {
+    "text": "Say thank you: Thank you for your question. Repeat: Your question is whether I think Hong Kong should control its air pollution",
+    "type": "steps",
+    "page": "P08"
+  },
+  "P09_EN_01": {
+    "text": "State your position: Yes, I completely agree. Hong Kong definitely needs to control its air pollution. Signpost: I have three main reasons for this. Firstly, poor air quality poses a serious risk to our health. Secondly, tourists and businesses will avoid coming to Hong Kong if the air is too polluted. Thirdly, I simply do not want my younger siblings to grow up breathing in polluted air. Closing: Therefore, I strongly believe Hong Kong must control its air pollution. It is important for everyone's health and for our city's future",
+    "type": "steps",
+    "page": "P09"
+  },
+  "P09_EN_02": {
+    "text": "Say thank you: Thank you for your question. Repeat: Your question is whether I think Hong Kong children should do more exercise. State your position: Yes, I entirely agree. Hong Kong children should certainly do more exercise. Signpost: I have three main reasons for this. Firstly, doing more exercise makes us much healthier and stronger. Secondly, if we exercise regularly, we will not need to go to the doctor's so often. Thirdly, having a healthier body helps us focus and study much better. Closing: Therefore, I strongly believe Hong Kong children should do more exercise. It helps us grow up not just strong in body, but also sharp in mind, making us happier and better learners",
+    "type": "steps",
+    "page": "P09"
+  },
+  "P18_EN_01": {
+    "text": "One day a countryman going to the nest of his Goose found there an egg all yellow and glittering. When he took it up it was as heavy as lead and he was going to throw it away, because he thought a trick had been played upon him. But he took it home on second thoughts, and soon found to his delight that it was an egg of pure gold. Every morning the same thing occurred, and he soon became rich by selling his eggs. As he grew rich he grew greedy; and thinking to get at once all the gold the Goose could give, he killed it and opened it only to find nothing",
+    "type": "passage",
+    "page": "P18"
+  },
+  "P22_EN_01": {
+    "text": "Poem 1: Some Things Don't Make Any Sense at All My mum says I'm her sugarplum. My mum says I'm her lamb. My mum says I'm completely perfect Just the way I am. My mum says I'm a super-special wonderful terrific little guy. My mum just had another baby. Why?",
+    "type": "poem",
+    "page": "P22"
+  }
+}

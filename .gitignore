@@ -17,3 +17,4 @@ desktop.ini
 # Python 暫存
 __pycache__/
 *.pyc
+.venv/

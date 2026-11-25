@@ -142,17 +142,26 @@ add('word:diligent', '示範：Diligent 勤奮 怎麼說', ['自我介紹', '加
 - 生詞放 `window.TERMS`：`{ term: 'extracurricular activities', zh: '課外活動' }`。`app.js` 會在英文段落自動加虛線（`\b` 詞界、長詞優先比對），點擊以 TTS 讀出並提示中文；中文翻譯段落與按鈕內文字不會被標記。
 - 新增頁面或改段落後，記得同步更新 d7 的鍵；執行 `python _build\build.py` 重建即生效。
 
-## 五、音頻（可選，提升課堂品質）
+## 五、音頻（Edge TTS 合成，僅英語）
 
-1. 把 MP3 放入 `audio/`，命名規則（僅英語錄音）：
+全站 41 段英文示範已由 Edge TTS **`en-GB-SoniaNeural`**（英式英語女聲，rate `-20%`，與課件 TTS 語速一致）合成為 MP3，置於 `audio/`，命名規則：
 
 ```
-P02_EN_01_Sonia.mp3     英文，Sonia 錄音
+P02_EN_01_Sonia.mp3     key 為 P02_EN_01，Sonia 語音
 ```
 
-- 音頻僅英語；`_ZH_` 中文段落與 `QUIZ_` 聽音辨字題不生成播放按鈕，亦不錄 MP3。
-- 放入檔案後，在 `js/data.js` 的 `window.AUDIO_MANIFEST` 加入對應 key 才會啟用（預設空 ⇒ 全走 TTS）。
-- 檔案缺失或載入失敗會自動退回 TTS，並在按鈕旁顯示 `TTS` 標籤，不會中斷課堂。
+- 音頻僅英語；`_ZH_` 中文段落與 `QUIZ_` 聽音辨字題不生成播放按鈕，亦不合成 MP3。
+- `window.AUDIO_MANIFEST`（`_build/d1.js`）登記 41 個 key；播放器優先播 MP3，檔案缺失或載入失敗才自動退回瀏覽器 TTS，按鈕旁顯示 `TTS` 標籤，不會中斷課堂。
+- 重新合成（改過課文後）：
+
+```powershell
+node _build\dump_audio_map.js      # 由 js/data.js 抽出 key 與朗讀文本 → audio_map.json
+node _build\update_manifest.js     # 同步 manifest 到 _build/d1.js
+python _build\build.py             # 重建 js/data.js
+.\.venv\Scripts\python.exe _build\gen_edge_tts.py   # 合成全部 MP3（--only <key> 單段重製）
+```
+
+- `.venv/` 為 edge-tts 虛擬環境，不納入版本庫。
 - 提示音（計時歸零、答對 / 答錯）預設用 WebAudio 即時合成；若 `AUDIO_MANIFEST['BEEP']` 存在才改用 `audio/beep.mp3`。
 
 ## 六、列印 / 導出 PDF

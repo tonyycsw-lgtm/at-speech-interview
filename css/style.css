@@ -210,6 +210,21 @@ em { font-style: normal; color: var(--c-muted); }
   flex: 1;
 }
 
+/* ---------------------------------------------------------------- 面板收起模式（平板／觸屏）
+   body.is-compact：頂欄壓窄、日程條收起、底部分頁欄壓窄，騰出中間內容高度。 */
+body.is-compact .topbar { padding: 6px clamp(16px, 3vw, 32px); gap: 8px; }
+body.is-compact .topbar__crumb { display: none; }
+body.is-compact .daybar { display: none; }
+body.is-compact .pager { padding: 8px clamp(16px, 3vw, 32px); gap: 10px; }
+body.is-compact .pager__mid { display: none; }
+body.is-compact .pager__btn { min-width: 96px; }
+body.is-compact .stage { padding-bottom: 72px; }
+body.is-compact .compact__label { display: inline; }
+@media (max-width: 720px) {
+  .compact__label { display: none; }
+  body.is-compact .compact__label { display: none; }
+}
+
 /* ---------------------------------------------------------------- 頁面 */
 .page { display: none; animation: fadeIn .25s ease both; }
 .page.is-active { display: block; }
@@ -833,16 +848,9 @@ em { font-style: normal; color: var(--c-muted); }
   padding-top: 10px; border-top: 1px solid var(--c-line);
 }
 
-/* ---------------------------------------------------------------- Toast */
-.toast {
-  position: fixed; left: 50%; bottom: 96px; transform: translate(-50%, 20px);
-  background: #0F172A; color: #fff; padding: 14px 22px; border-radius: var(--radius);
-  box-shadow: var(--shadow-lg); font-weight: 600; font-size: var(--fs-small);
-  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease;
-  z-index: 900; max-width: min(560px, 88vw);
-}
-.toast.is-show { opacity: 1; transform: translate(-50%, 0); }
-.toast--warn { background: #991B1B; }
+/* ---------------------------------------------------------------- Toast（全局停用）
+   課堂現場不彈提示彈窗；保留樣式以相容既有標記，但一律隱藏。 */
+.toast { display: none !important; }
 
 /* ---------------------------------------------------------------- 響應式 */
 @media (max-width: 1180px) {
@@ -1020,9 +1028,9 @@ body.is-modal-open { overflow: hidden; }
 @media print {
   @page { size: A4 portrait; margin: 14mm 14mm 16mm; }
 
-  .sidebar, .topbar, .pager, .audio, .audio__bar, .speak-row, .say, .modal,
+  .sidebar, .topbar, .daybar, .pager, .audio, .audio__bar, .speak-row, .say, .modal,
   .draw__actions, .timer__actions, .quiz__row .audio, .btn, .scrim, .toast,
-  .footer-note, .skip-link, .pager__dots { display: none !important; }
+  .footer-note, .skip-link, .pager__dots, .dock { display: none !important; }
 
   html, body { background: #fff !important; font-size: 9.5pt; }
   body { line-height: 1.45 !important; }
@@ -1167,6 +1175,19 @@ body.is-modal-open { overflow: hidden; }
   box-shadow: 0 10px 28px rgba(15, 23, 42, .16);
   backdrop-filter: blur(10px);
 }
+/* dock 工具條收合：收為單一圓形浮鈕，再點浮鈕還原 */
+.dock__fab {
+  display: none;
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 1px solid #E2E8F0; background: #fff;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, .16);
+  color: #1E293B; cursor: pointer; align-items: center; justify-content: center;
+}
+.dock__fab .dock__ico { width: 22px; height: 22px; }
+.dock.is-collapsed .dock__bar { display: none; }
+.dock.is-collapsed .dock__fab { display: inline-flex; }
+.dock__collapse { padding: 0 10px; }
+.dock__collapse .dock__ico { width: 16px; height: 16px; }
 .dock__chip {
   display: inline-flex; align-items: center; gap: 6px;
   height: 40px; padding: 0 14px;

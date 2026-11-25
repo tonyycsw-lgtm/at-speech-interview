@@ -22,6 +22,9 @@
   <symbol id="i-left" viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-right" viewBox="0 0 24 24"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 6c3-1 5-1 8 1 3-2 5-2 8-1v12c-3-1-5-1-8 1-3-2-5-2-8-1z" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-chevron-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
 </svg>
 
 <div class="app">
@@ -70,6 +73,11 @@
       </div>
       <div class="topbar__actions">
         <span class="page__badge" id="pageBadge" aria-live="polite">P.00</span>
+        <button type="button" class="btn btn--ghost btn--sm" id="compactBtn" data-compact
+                aria-pressed="false" aria-label="收起功能面板">
+          <svg class="btn__icon" aria-hidden="true"><use href="#i-chevron-up"></use></svg>
+          <span class="compact__label">收起面板</span>
+        </button>
         <button type="button" class="btn btn--primary btn--sm" data-export>
           <svg class="btn__icon" aria-hidden="true"><use href="#i-print"></use></svg>
           列印／匯出 PDF

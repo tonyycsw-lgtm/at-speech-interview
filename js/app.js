@@ -22,6 +22,7 @@
   var PLEDGE_KEY = 'atspeech.pledge.v1';
   var DAY_KEY = 'atspeech.day.v1';
   var MARK_KEY = 'atspeech.mark.v1';
+  var COMPACT_KEY = 'atspeech.compact.v1';
   var timerHandle = null;
   var activeDay = null;
   var dockTimer = null, dockLeft = 0, dockTotal = 0, dockRunning = false;
@@ -86,22 +87,9 @@
       });
   }
 
-  /* ------------------------------------------------------------ Toast */
-  var toastEl, toastTimer;
-  function toast(msg, kind) {
-    if (!toastEl) {
-      toastEl = document.createElement('div');
-      toastEl.className = 'toast';
-      toastEl.setAttribute('role', 'status');
-      toastEl.setAttribute('aria-live', 'polite');
-      document.body.appendChild(toastEl);
-    }
-    toastEl.textContent = msg;
-    toastEl.classList.toggle('toast--warn', kind === 'warn');
-    toastEl.classList.add('is-show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toastEl.classList.remove('is-show'); }, 2600);
-  }
+  /* ------------------------------------------------------------ Toast（全局停用）
+     課堂現場不彈提示彈窗；保留呼叫介面，避免其他模組呼叫時報錯。 */
+  function toast() { /* 已停用：不顯示任何彈窗提示 */ }
   window.UI = { toast: toast };
 
   /* ------------------------------------------------------------ 語音按鈕 */
@@ -1067,7 +1055,9 @@
       '<span>計時</span><span class="dock__mini" data-dock-mini hidden></span></button>' +
       '<button type="button" class="dock__chip" data-dock-draw>' + icon('i-dice', 'dock__ico') + '抽題</button>' +
       '<button type="button" class="dock__chip" data-dock-mark>標重點</button>' +
-      '</div>';
+      '<button type="button" class="dock__chip dock__collapse" data-dock-collapse aria-label="收起課堂工具">' + icon('i-chevron-down', 'dock__ico') + '</button>' +
+      '</div>' +
+      '<button type="button" class="dock__fab" data-dock-fab aria-label="展開課堂工具">' + icon('i-clock', 'dock__ico') + '</button>';
     document.body.appendChild(el);
   }
 
@@ -1351,6 +1341,20 @@
         var dpx = $('[data-dock-panel]'); if (dpx) dpx.hidden = true;
         return;
       }
+      if (t.closest('[data-dock-collapse]')) {
+        var dw = $('#dock');
+        if (dw) {
+          var dpxc = $('[data-dock-panel]', dw);
+          if (dpxc) dpxc.hidden = true;
+          dw.classList.add('is-collapsed');
+        }
+        return;
+      }
+      if (t.closest('[data-dock-fab]')) {
+        var dw2 = $('#dock');
+        if (dw2) dw2.classList.remove('is-collapsed');
+        return;
+      }
       if (t.closest('[data-dock-start]')) { dockStart(); return; }
       if (t.closest('[data-dock-reset]')) { dockReset(); return; }
       var dPreset = t.closest('[data-dock-preset]');
@@ -1434,6 +1438,12 @@
       /* 側欄開合 */
       if (t.closest('[data-menu]')) { openSidebar(); return; }
       if (t.closest('[data-scrim]')) { closeSidebar(); return; }
+
+      /* 面板收起／展開 */
+      if (t.closest('[data-compact]')) {
+        applyCompact(!document.body.classList.contains('is-compact'));
+        return;
+      }
 
       /* 承諾清單 */
       var pl2 = t.closest('[data-pledge]');
@@ -1623,6 +1633,20 @@
     if ($('#menuBtn')) $('#menuBtn').setAttribute('aria-expanded', 'false');
   }
 
+  /* 面板收起模式：頂欄壓窄、日程條收起、分頁欄壓窄；狀態持久化到 localStorage */
+  function applyCompact(on) {
+    document.body.classList.toggle('is-compact', on);
+    var btn = $('#compactBtn');
+    if (btn) {
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      var lab = btn.querySelector('.compact__label');
+      if (lab) lab.textContent = on ? '展開面板' : '收起面板';
+      var use = btn.querySelector('use');
+      if (use) use.setAttribute('href', on ? '#i-chevron-down' : '#i-chevron-up');
+    }
+    try { localStorage.setItem(COMPACT_KEY, on ? '1' : '0'); } catch (e) { /* 忽略 */ }
+  }
+
   /* 列印／導出 PDF（開發聖經 5.2） */
   function exportPDF() {
     if (demoOpen()) closeDemo();
@@ -1647,9 +1671,12 @@
 
     var saved = '';
     var savedDay = '';
+    var savedCompact = '';
     try { saved = localStorage.getItem(STORE_KEY) || ''; } catch (e) { saved = ''; }
     try { savedDay = localStorage.getItem(DAY_KEY) || ''; } catch (e) { savedDay = ''; }
+    try { savedCompact = localStorage.getItem(COMPACT_KEY) || ''; } catch (e) { savedCompact = ''; }
     activeDay = dayById(savedDay) ? savedDay : null;
+    applyCompact(savedCompact === '1');
 
     var hashId = location.hash.replace('#', '');
     var startId = (hashId && PAGES.some(function (p) { return p.id === hashId; })) ? hashId : saved;

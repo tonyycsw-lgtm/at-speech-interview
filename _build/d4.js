@@ -163,7 +163,7 @@ window.PAGES.find(function (p) { return p.id === 'P10'; }).blocks.push(
 /* 聽音辨字掛在 P.21 末（正粵音之後） */
 window.PAGES.find(function (p) { return p.id === 'P21'; }).blocks.push(
   { type: 'h2', en: 'Listen & Choose', zh: '聽音辨字' },
-  { type: 'callout', tone: 'tip', html: '按喇叭播放粵音，選出你聽到的字。答對變綠並響「叮」，答錯變紅並抖動，可重試。' },
+  { type: 'callout', tone: 'tip', html: '比對兩個字，選出正確答案。答對變綠並響「叮」，答錯變紅並抖動，可重試。' },
   { type: 'quiz', items: [
     { text: '吳', options: ['唔', '吳'], answer: 1, hint: 'NG 音（從口腔出）／N 音（齒舌結合）的對比：吳、吾、五、午、梧、蜈 屬 N 音。' },
     { text: '你', options: ['你', '李'], answer: 0, hint: 'L 音：藍、李、黎、賴、呂；N 音：你、男、泥、奶、難、女。' },

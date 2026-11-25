@@ -15,7 +15,7 @@
   var PAGES = window.PAGES || [];
   var CHAPTERS = window.CHAPTERS || [];
   var SPEAK_TEXT = {};                 // key → 純文字（供 TTS 朗讀）
-  var SPEAK_LANG = {};                 // key → 'en' | 'yue'
+  var SPEAK_LANG = {};                 // key → 'en'（音頻僅英語）
   var pageIndex = 0;
   var currentPage = null;
   var STORE_KEY = 'atspeech.page.v1';
@@ -51,6 +51,23 @@
       .replace(/&quot;/g, '"')
       .replace(/&#39;/g, "'")
       .replace(/\s{2,}/g, ' ')
+      .trim();
+    return s;
+  }
+
+  /* 純英語朗讀文本：剔除所有中文字詞與中文／全形標點，括號內只剩中文時連括號一併移除。
+     規則：課件音頻僅播英語，中文翻譯與註釋不進入 TTS。 */
+  function englishOnly(text) {
+    var s = String(text == null ? '' : text)
+      /* 含中文的括號註釋整段移除（半形／全形括號） */
+      .replace(/[（(][^（）()]*[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff][^（）()]*[)）]/g, ' ')
+      .replace(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g, '')   // 中文字
+      .replace(/[\u3000-\u303f\uff00-\uffef]/g, ' ')              // 中文／全形標點 → 空格
+      .replace(/[（(]\s*[)）]/g, ' ')                               // 清空後的空括號
+      .replace(/\s{2,}/g, ' ')
+      .replace(/\s+([,.;:!?，。；：！？])/g, '$1')                   // 標點前不留白
+      .replace(/^\s*[:：,，.．、；;]+/, '')
+      .replace(/\s*[:：,，.．、；;]+$/, '')
       .trim();
     return s;
   }
@@ -92,13 +109,14 @@
     return '<svg class="' + (cls || 'btn__icon') + '" aria-hidden="true" focusable="false"><use href="#' + id + '"></use></svg>';
   }
 
-  function langFor(key) {
-    return (/_ZH_/.test(key) || /^QUIZ_/.test(key) || /_CANTO_/.test(key)) ? 'yue' : 'en';
+  /* 課件音頻僅英語：中文／粵語語音按鈕一律不生成。 */
+  function isChineseKey(key) {
+    return /_ZH_/.test(key) || /^QUIZ_/.test(key) || /_CANTO_/.test(key);
   }
 
   function audioBtn(key, cls) {
-    if (!key) return '';
-    SPEAK_LANG[key] = langFor(key);
+    if (!key || isChineseKey(key)) return '';
+    SPEAK_LANG[key] = 'en';
     return '<div class="speak-row' + (cls ? ' ' + cls : '') + '">' +
       '<button type="button" class="audio" data-audio="' + esc(key) + '" aria-pressed="false" ' +
       'aria-label="播放本段語音">' +
@@ -131,11 +149,9 @@
           if (bl) bl.textContent = '全段';
         }
       }
-      var text = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      var text = englishOnly((el.textContent || '').replace(/\s+/g, ' ').trim());
       var latin = (text.match(/[A-Za-z]/g) || []).length;
       if (latin < 14) return;
-      var cjk = (text.match(/[\u4e00-\u9fff]/g) || []).length;
-      if (cjk > latin * 1.6) return;
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'say';
@@ -209,16 +225,9 @@
     nodes.forEach(function (n) { if (n.parentNode) wrapTermsIn(n); });
   }
 
-  /* 香港地名用粵語讀音：句中的 Tsuen Wan 切成粵語「荃灣」，其餘保持英語。 */
-  function splitTsuenWan(text) {
-    if (!/tsuen\s+wan/i.test(text)) return null;
-    var segs = [];
-    String(text).split(/(tsuen\s+wan)/i).forEach(function (part, i) {
-      if (!part) return;
-      if (i % 2) segs.push({ text: '荃灣', lang: 'yue' });
-      else segs.push({ text: part, lang: 'en' });
-    });
-    return segs;
+  /* 課件音頻僅英語：不再為 Tsuen Wan 切粵語分段，地名交由英語語音讀出。 */
+  function splitTsuenWan(/* text */) {
+    return null;
   }
 
   var demoEl = null, demoData = null, demoIdx = 0, demoLastFocus = null;
@@ -438,7 +447,7 @@
 
   R.p = function (b) {
     var key = b.a;
-    if (key) SPEAK_TEXT[key] = stripHtml(b.html);
+    if (key) SPEAK_TEXT[key] = englishOnly(stripHtml(b.html));
     var head = key ? audioBtn(key, 'card__audio') : '';
     if (b.variants && b.variants.length) {
       var active = b.variants.length > 1 ? 1 : 0;
@@ -462,7 +471,7 @@
 
   R.example = function (b) {
     var key = b.a;
-    var plain = (b.paragraphs || []).map(stripHtml).join(' ');
+    var plain = (b.paragraphs || []).map(function (p) { return englishOnly(stripHtml(p)); }).join(' ');
     if (key) SPEAK_TEXT[key] = plain;
     var body;
     if (b.variants && b.variants.length) {
@@ -487,7 +496,7 @@
 
   R.steps = function (b) {
     var key = b.a;
-    if (key) SPEAK_TEXT[key] = b.items.map(function (it) { return it.tag + ': ' + stripHtml(it.html); }).join(' ');
+    if (key) SPEAK_TEXT[key] = englishOnly(b.items.map(function (it) { return it.tag + ': ' + stripHtml(it.html); }).join(' '));
     var items = b.items.map(function (it) {
       var long = String(it.tag).length > 10;
       if (long) {
@@ -543,7 +552,7 @@
 
   R.passage = function (b) {
     var key = b.a;
-    var plain = (b.paragraphs || []).map(stripHtml).join(' ');
+    var plain = (b.paragraphs || []).map(function (p) { return englishOnly(stripHtml(p)); }).join(' ');
     if (key) SPEAK_TEXT[key] = plain;
     var cls = 'passage' + (b.tone === 'quote' || b.highlight ? ' passage--quote' : '');
     var indent = b.tone === 'quote' ? ' passage__body--noindent' : '';
@@ -614,7 +623,7 @@
 
   R.poem = function (b) {
     var key = b.a;
-    if (key) SPEAK_TEXT[key] = [b.title].concat(b.lines).join(' ');
+    if (key) SPEAK_TEXT[key] = englishOnly([b.title].concat(b.lines).join(' '));
     return '<div class="poem">' +
       '<div class="card__head"><h4 class="poem__title">' + esc(b.title) + '</h4>' + (key ? audioBtn(key) : '') + '</div>' +
       '<p class="poem__lines">' + b.lines.map(function (l) { return esc(l); }).join('<br>') + '</p>' +
@@ -734,7 +743,7 @@
   R.quiz = function (b) {
     var cards = b.items.map(function (it, qi) {
       var key = 'QUIZ_' + qi + '_' + it.text;
-      SPEAK_TEXT[key] = it.text;
+      SPEAK_TEXT[key] = englishOnly(it.text);
       var opts = it.options.map(function (o, oi) {
         return '<button type="button" class="quiz__opt" data-opt="' + oi + '" data-right="' + it.answer + '">' + esc(o) + '</button>';
       }).join('');
@@ -1321,7 +1330,7 @@
       var dSay = t.closest('[data-demo-say]');
       if (dSay) {
         var dd = demoData.demos[demoIdx];
-        var dText = dd.say || stripHtml(dd.html);
+        var dText = englishOnly(dd.say || stripHtml(dd.html));
         var dSegs = splitTsuenWan(dText);
         if (dSegs) AudioEngine.speakSegments(dSegs, dText, dSay);
         else AudioEngine.toggle(null, dText, dSay, 'en');

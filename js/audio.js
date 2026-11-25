@@ -2,9 +2,9 @@
    audio.js — 音頻播放器、TTS 降級邏輯
    規則（開發聖經 3.1–3.3）
      1. 互斥播放：任何時刻只允許一個聲音（MP3 或 TTS）
-     2. 優先級 1：本地 MP3（/audio/P02_EN_01_Sonia.mp3、/audio/P20_ZH_01_Canto.mp3）
+     2. 優先級 1：本地 MP3（/audio/P02_EN_01_Sonia.mp3）
      3. 優先級 2：MP3 缺失或載入失敗 → 瀏覽器 TTS，並在按鈕旁標示 (TTS)
-     4. 英語 TTS：en-GB，rate 0.8（-20%）；粵語 TTS：zh-HK
+     4. 語音僅英語：en-GB，rate 0.8（-20%）；中文／粵語文本一律不進入發音
    ========================================================================= */
 
 var AudioEngine = (function () {
@@ -16,13 +16,26 @@ var AudioEngine = (function () {
   var startedAt = 0;
   var chain = 0;               // 分段朗讀的世代號，stopAll 時遞增以作廢舊隊列
 
-  function langOf(key) {
-    var parts = String(key || '').split('_');
-    return (parts[1] === 'ZH') ? 'yue' : 'en';
+  function langOf(/* key */) {
+    return 'en';
   }
 
-  function fileFor(key, lang) {
-    return window.AUDIO_BASE + key + (lang === 'yue' ? '_Canto.mp3' : '_Sonia.mp3');
+  /* 純英語朗讀文本：剔除中文字詞與中文／全形標點，清空後的空括號一併移除。 */
+  function englishOnly(text) {
+    return String(text == null ? '' : text)
+      .replace(/[（(][^（）()]*[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff][^（）()]*[)）]/g, ' ')
+      .replace(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g, '')
+      .replace(/[\u3000-\u303f\uff00-\uffef]/g, ' ')
+      .replace(/[（(]\s*[)）]/g, ' ')
+      .replace(/\s{2,}/g, ' ')
+      .replace(/\s+([,.;:!?，。；：！？])/g, '$1')
+      .replace(/^\s*[:：,，.．、；;]+/, '')
+      .replace(/\s*[:：,，.．、；;]+$/, '')
+      .trim();
+  }
+
+  function fileFor(key/*, lang */) {
+    return window.AUDIO_BASE + key + '_Sonia.mp3';
   }
 
   function hasFile(key) {
@@ -84,39 +97,43 @@ var AudioEngine = (function () {
   }
 
   /* -------------------------------------------------------- TTS 降級 */
-  function pickVoice(lang) {
+  function pickVoice(/* lang */) {
     if (!voices.length) voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-    var wanted = (lang === 'yue') ? ['zh-HK', 'zh_HK', 'yue', 'zh-TW'] : ['en-GB'];
+    var wanted = ['en-GB'];
     for (var w = 0; w < wanted.length; w++) {
       var tag = wanted[w].toLowerCase();
       for (var i = 0; i < voices.length; i++) {
         var v = voices[i];
         if (String(v.lang).toLowerCase().indexOf(tag) === 0) {
-          if (lang === 'en' && /sonia|google uk english female|daniel|kate|serena/i.test(v.name)) return v;
-          if (lang !== 'en') return v;
+          if (/sonia|google uk english female|daniel|kate|serena/i.test(v.name)) return v;
         }
       }
     }
     for (var j = 0; j < voices.length; j++) {
-      if (String(voices[j].lang).toLowerCase().indexOf(lang === 'yue' ? 'zh' : 'en') === 0) return voices[j];
+      if (String(voices[j].lang).toLowerCase().indexOf('en') === 0) return voices[j];
     }
     return null;
   }
 
-  function speakTTS(text, lang, button) {
-    if (!text || !window.speechSynthesis) {
+  function speakTTS(rawText, lang, button) {
+    if (!window.speechSynthesis) {
       toast('此瀏覽器不支援語音合成，請改播 MP3', 'warn');
       return;
     }
+    var text = englishOnly(rawText);
+    if (!text) {
+      toast('本段沒有可朗讀的英文內容', 'warn');
+      return;
+    }
     var u = new window.SpeechSynthesisUtterance(text);
-    var v = pickVoice(lang);
+    var v = pickVoice('en');
     if (v) u.voice = v;
-    u.lang = (lang === 'yue') ? 'zh-HK' : 'en-GB';
-    u.rate = (lang === 'yue') ? 0.9 : 0.8;
+    u.lang = 'en-GB';
+    u.rate = 0.8;
     u.pitch = 1;
 
     var total = text.length;
-    current = { mode: 'tts', lang: lang, text: text, button: button, key: null };
+    current = { mode: 'tts', lang: 'en', text: text, button: button, key: null };
     markButton(button, true, true);
 
     u.onboundary = function (ev) {
@@ -129,8 +146,8 @@ var AudioEngine = (function () {
     window.speechSynthesis.speak(u);
   }
 
-  /* 分段朗讀：同一句內切換語言（例如 Tsuen Wan 用粵語讀「荃灣」）。
-     segments = [{ text, lang:'en'|'yue' }, …] */
+  /* 分段朗讀：全部以英語發音，中文片段剔除後跳過。
+     segments = [{ text, lang:'en' }, …] */
   function speakSegments(segments, fullText, button) {
     if (!window.speechSynthesis) {
       toast('此瀏覽器不支援語音合成，請改播 MP3', 'warn');
@@ -139,20 +156,21 @@ var AudioEngine = (function () {
     if (current && current.button === button) { stopAll(); return; }
     stopAll();
     var my = chain;
+    var cleaned = (segments || []).map(function (seg) {
+      return { text: englishOnly(seg && seg.text) };
+    }).filter(function (seg) { return !!seg.text; });
     current = { mode: 'tts', lang: 'en', text: fullText, button: button, key: null };
     markButton(button, true, true);
     var i = 0;
     function step() {
       if (my !== chain) return;
-      if (i >= segments.length) { finish(); return; }
-      var seg = segments[i++];
-      if (!seg || !seg.text) { step(); return; }
-      var lang = seg.lang === 'yue' ? 'yue' : 'en';
+      if (i >= cleaned.length) { finish(); return; }
+      var seg = cleaned[i++];
       var u = new window.SpeechSynthesisUtterance(seg.text);
-      var v = pickVoice(lang);
+      var v = pickVoice('en');
       if (v) u.voice = v;
-      u.lang = (lang === 'yue') ? 'zh-HK' : 'en-GB';
-      u.rate = (lang === 'yue') ? 0.9 : 0.8;
+      u.lang = 'en-GB';
+      u.rate = 0.8;
       u.pitch = 1;
       u.onend = step;
       u.onerror = step;

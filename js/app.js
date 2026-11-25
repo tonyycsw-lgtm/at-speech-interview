@@ -117,6 +117,14 @@
   }
 
   /* ------------------------------------------------------------ 逐段播放 */
+  /* 提取朗讀文本：剔除內嵌的示範鈕、插槽、中文翻譯段等控制項，
+     避免按鈕圖示（如 ↗）或中文段殘留的英文字滲入朗讀內容。 */
+  function plainSayText(el) {
+    var clone = el.cloneNode(true);
+    clone.querySelectorAll('.zh, .pill--demo, .slot, .qinfo__toggle, .say').forEach(function (n) { n.remove(); });
+    return englishOnly((clone.textContent || '').replace(/\s+/g, ' ').trim());
+  }
+
   /* 為每一段英文補上獨立「播放／暫停」按鈕（Material 式 inline chip） */
   function decorateSay() {
     var cands = $$('.page p, .page li, .qa__en, .blist__en');
@@ -137,7 +145,7 @@
           if (bl) bl.textContent = '全段';
         }
       }
-      var text = englishOnly((el.textContent || '').replace(/\s+/g, ' ').trim());
+      var text = plainSayText(el);
       var latin = (text.match(/[A-Za-z]/g) || []).length;
       if (latin < 14) return;
       var btn = document.createElement('button');
